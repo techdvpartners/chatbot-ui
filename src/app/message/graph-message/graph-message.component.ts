@@ -20,6 +20,7 @@ import { Chart } from 'chart.js';
   styleUrls: ['./graph-message.component.css']
 })
 export class GraphMessageComponent implements MessageComponent {
+  @Input() sender;
   @Input() message;
   chart=[];
   constructor() { }
@@ -32,10 +33,10 @@ export class GraphMessageComponent implements MessageComponent {
     this.chart = new Chart('canvas', {
       type: 'line',
       data: {
-        labels: this.message.data.xAxis,
+        labels: this.message.xAxis,
         datasets: [
           {
-            data: this.message.data.yAxis,
+            data: this.message.yAxis,
             borderColor: "#3cba9f",
             fill: false
           }

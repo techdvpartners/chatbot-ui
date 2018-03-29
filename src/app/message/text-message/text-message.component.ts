@@ -4,19 +4,20 @@ import { MessageComponent } from '../message.component';
 @Component({
   selector: 'app-text-message',
   template: `<div [ngClass]="{
-              'card bg-success text-white': message.sender === 'You',
-              'card bg-light text-right': message.sender === 'ChatBot'
+              'card bg-success text-white': sender === 'You',
+              'card bg-light text-right': sender === 'ChatBot'
             }">
               <div class="card-body">
                 <p class="card-title">
-                  <b>{{ message.sender }}</b>
+                  <b>{{ sender }}</b>
                 </p>
-                <p class="card-text">{{ message.text }}</p>
+                <p class="card-text">{{ message }}</p>
               </div>
             </div>`,
   styleUrls: ['./text-message.component.css']
 })
 export class TextMessageComponent implements MessageComponent {
+  @Input() sender;
   @Input() message;
   constructor() { }
 

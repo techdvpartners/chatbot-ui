@@ -48,6 +48,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(messageItem.messageType);
     let viewContainerRef = this.messageHost.viewContainerRef;
     let componentRef = viewContainerRef.createComponent(componentFactory);
+    (<MessageComponent>componentRef.instance).sender = messageItem.sender;
     (<MessageComponent>componentRef.instance).message = messageItem.message;
   }
 
@@ -63,11 +64,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
   sendEvent() {
     var data = this.fileAsDataURL;
     this.fileAsDataURL = null;
-    let messageObject = {
-      'sender': 'You',
-      'text': 'User uploads file'
-    };
-    let messageItem = new MessageItem(TextMessageComponent,messageObject);
+    let messageItem = new MessageItem(TextMessageComponent,'You','Attachment Uploaded');
     this.createMessage(messageItem)
     var requestBodyWithEvent = {
       "lang": "en",
@@ -85,11 +82,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
   sendTextMessage() {
     var queryMessage = this.textMessage;
     this.textMessage = '';
-    let messageObject = {
-      'sender': 'You',
-      'text': queryMessage
-    };
-    let messageItem = new MessageItem(TextMessageComponent,messageObject);
+    let messageItem = new MessageItem(TextMessageComponent,'You',queryMessage);
     this.createMessage(messageItem);
     var requestBodyWithText = {
       "lang": "en",
@@ -106,21 +99,26 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
         console.log(response);
         var responseMessages = response['result']['fulfillment']['messages'];
         for (var message in responseMessages) {
-          let messageObject = {
-            'sender':'ChatBot',
-            'text':responseMessages[message]['speech']
-          };
-          let messageItem = new MessageItem(TextMessageComponent,messageObject);
+          let messageItem = new MessageItem(TextMessageComponent,'ChatBot',responseMessages[message]['speech']);
           this.createMessage(messageItem);
         }
 
         if(response['result']['fulfillment']['data']!=null){
-          for(var message in response['result']['fulfillment']['data']){
-            let messageObject = {
-              'sender':'ChatBot',
-              'data':response['result']['fulfillment']['data'][message]
-            };
-            let messageItem = new MessageItem(GraphMessageComponent,messageObject);
+          var richMessages = response['result']['fulfillment']['data'];
+          for(var i in richMessages){
+            let messageItem;
+            if(richMessages[i]['representation'] == 'graph'){
+              messageItem = new MessageItem(GraphMessageComponent,'ChatBot',{
+                "xAxis":richMessages[i]['graphData']['xAxis'],
+                "yAxis":richMessages[i]['graphData']['yAxis']
+              });
+            }
+            else if(richMessages[i]['representation'] == 'text'){
+              messageItem = new MessageItem(TextMessageComponent,'ChatBot',richMessages[i]['textData']);
+            }
+            else{
+              messageItem = new MessageItem(TextMessageComponent,'ChatBot',richMessages[i]);
+            }
             this.createMessage(messageItem);
           }
 
