@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css"
+  integrity="sha256-BJ/G+e+y7bQdrYkS2RBTyNfBHpA9IuGaPmf9htub5MQ=" crossorigin="anonymous" />
+
+<div #keepScrollDown class="container-fluid position-fixed" id="chatDisplay" style="overflow-y: scroll; height: 90%;">
+  <ng-template message-host></ng-template>
+</div>
+
+<div class="container-fluid input-group fixed-bottom" id="chatInput">
+  <input type="text" id="textMessage" [(ngModel)]="textMessage" class="form-control" (keydown.enter)="sendRequest()">
+  <label for="attachment">
+    <span class="oi oi-paperclip" title="paperclip" aria-hidden="true"></span>
+  </label>
+
+  <div class="input-group-append">
+    <button class="btn btn-primary" type="button" (click)="sendRequest()">Send</button>
+  </div>
+</div>
+<input class="invisible" type="file" id="attachment" (change)="onFileChange($event)" #fileInput>
