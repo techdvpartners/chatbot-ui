@@ -1,0 +1,27 @@
+<div [ngClass]="{
+    'card bg-success text-white': sender === 'You',
+    'card bg-light text-right': sender === 'ChatBot'
+  }">
+    <div class="card-body">
+      <p class="card-title">
+        <b>{{ sender }}</b>
+      </p>
+      <table border="2">
+        <tr>
+          <th *ngFor="let headerCell of message.header">
+            {{ headerCell }}
+          </th>
+        </tr>
+        <tr *ngFor="let row of message.rows">
+          <td *ngFor="let rowCell of row">
+            <div [ngSwitch]="isA(rowCell)">
+              <button class="btn btn-primary" *ngSwitchCase="'quickReply'" (click)="sendTextMessage(replaceType(rowCell))">{{ replaceType(rowCell) }}</button>
+              <p *ngSwitchDefault>{{ rowCell }}</p>
+            </div>
+            
+            
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>

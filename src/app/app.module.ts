@@ -9,16 +9,18 @@ import { MessageDirective } from './message/message.directive';
 import { MessageComponent } from './message/message.component';
 import { TextMessageComponent } from './message/text-message/text-message.component';
 import { GraphMessageComponent } from './message/graph-message/graph-message.component';
+import { TableMessageComponent } from './message/table-message/table-message.component';
 
 
 @NgModule({
-  entryComponents: [ TextMessageComponent, GraphMessageComponent ],
+  entryComponents: [ TextMessageComponent, GraphMessageComponent, TableMessageComponent ],
   declarations: [
     AppComponent,
     ChatboxComponent,
     MessageDirective,
     TextMessageComponent,
-    GraphMessageComponent
+    GraphMessageComponent,
+    TableMessageComponent
   ],
   imports: [
     BrowserModule,

@@ -25,26 +25,40 @@ function processV1Request (request, response) {
   const googleAssistantRequest = 'google'; // Constant to identify Google Assistant requests
   const app = new DialogflowApp({request: request, response: response});
   // Create handlers for Dialogflow actions as well as a 'default' handler
-  var dataUrl = request.body.result.contexts[0].parameters.dataUrl;
-  var base64Data = dataUrl.substr(dataUrl.indexOf('base64') + 7);
-  var buffer = new Buffer(base64Data, 'base64');
-  var data = buffer.toString('utf8');
-  var dataArray = data.split('\n');
-  var xAxis = [];
-  var yAxis = [];
-  for(var i in dataArray){
-      var x = dataArray[i].split(',')[0];
-      var y = dataArray[i].split(',')[1];
-      
-      xAxis.push(x);
-      yAxis.push(y);
-  }
-  
   const actionHandlers = {
     'default': () => {
       sendResponse('Hello, Welcome to my Dialogflow agent!');
     },
+    'provide-reference-number': () => {
+      let responseToUser = {
+        data: [
+          {
+            "representation":"sessionId",
+          }
+        ],
+        messages: messages,
+        //outputContexts: [{'name': 'weather', 'lifespan': 2, 'parameters': {'city': 'Rome'}}], // Optional, uncomment to enable
+        //speech: 'This message is from Dialogflow\'s Cloud Functions for Firebase editor! v1 speech', // spoken response
+        speech: messages[0].speech,
+        text: messages[0].speech
+      };
+      sendResponse(responseToUser);
+    },
     'action-file-upload': () => {
+      var dataUrl = request.body.result.contexts[0].parameters.dataUrl;
+      var base64Data = dataUrl.substr(dataUrl.indexOf('base64') + 7);
+      var buffer = new Buffer(base64Data, 'base64');
+      var data = buffer.toString('utf8');
+      var dataArray = data.split('\n');
+      var xAxis = [];
+      var yAxis = [];
+      for(var i in dataArray){
+          var x = dataArray[i].split(',')[0];
+          var y = dataArray[i].split(',')[1];
+          
+          xAxis.push(x);
+          yAxis.push(y);
+      }
       let responseToUser = {
         data: [
           {
@@ -61,11 +75,15 @@ function processV1Request (request, response) {
           {
             "representation":"table",
             "tableData":{
-              "header":[],
+              "header":["QuoteID - 101202303","Lock In","Pricing","Peak","Off Peak","Shoulder","Estimated Monthly Bill","Potential Mismatch charge*"],
               "rows":[
-                ["mohak", "26", "Male"],
-                ["Ned", "52", "Male"],
-                ["cersie", "40", "Female"]
+                ["quickReply:30 Day Rolling", "30 days", "Variable*","10.0p","10.0p","10.0p","",""],
+                ["quickReply:Night Owl 1", "12 months", "Fixed","11.0p","5.0p","7.0p","£100","£10"],
+                ["quickReply:Night Owl 2", "24 months", "Fixed","11.5p","5.5p","7.5p","£105","£10"],
+                ["quickReply:Night Owl 3", "36 months", "Fixed","12.0p","5.5p","7.5p","£110","£10"],
+                ["quickReply:Balanced 1", "12 months", "Fixed","12.0p","8.0p","5.0p","£110","£0"],
+                ["quickReply:Balanced 2", "24 months", "Fixed","12.1p","8.1p","5.2p","£112","£0"],
+                ["quickReply:Balanced 3", "36 months", "Fixed","12.2p","8.2p","5.2p","£115","£0"]
               ]
             }
           }

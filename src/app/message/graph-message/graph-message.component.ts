@@ -5,12 +5,12 @@ import { Chart } from 'chart.js';
 @Component({
   selector: 'app-graph-message',
   template: `<div [ngClass]="{
-              'card bg-success text-white': message.sender === 'You',
-              'card bg-light text-right': message.sender === 'ChatBot'
+              'card bg-success text-white': sender === 'You',
+              'card bg-light text-right': sender === 'ChatBot'
             }">
               <div class="card-body">
                 <p class="card-title">
-                  <b>{{ message.sender }}</b>
+                  <b>{{ sender }}</b>
                 </p>
                 <div>
                   <canvas id="canvas">{{ chart }}</canvas>

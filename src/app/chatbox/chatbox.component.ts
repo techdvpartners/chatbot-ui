@@ -6,6 +6,7 @@ import { MessageItem } from '../message/message-item';
 import { MessageComponent } from '../message/message.component';
 import { TextMessageComponent } from '../message/text-message/text-message.component';
 import { GraphMessageComponent } from '../message/graph-message/graph-message.component';
+import { TableMessageComponent } from '../message/table-message/table-message.component';
 
 @Component({
   selector: 'app-chatbox',
@@ -50,6 +51,14 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     let componentRef = viewContainerRef.createComponent(componentFactory);
     (<MessageComponent>componentRef.instance).sender = messageItem.sender;
     (<MessageComponent>componentRef.instance).message = messageItem.message;
+
+    if(messageItem.messageType == TableMessageComponent){
+      (<TableMessageComponent>componentRef.instance).quickReplyValue.subscribe(text => {
+        this.textMessage = text;
+        this.sendRequest();
+      });
+    }
+
   }
 
   sendRequest() {
@@ -78,7 +87,9 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     };
     this.queryAndHandleResponse(requestBodyWithEvent);
   }
-
+  test(event){
+    console.log(event);
+  }
   sendTextMessage() {
     var queryMessage = this.textMessage;
     this.textMessage = '';
@@ -116,8 +127,14 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
             else if(richMessages[i]['representation'] == 'text'){
               messageItem = new MessageItem(TextMessageComponent,'ChatBot',richMessages[i]['textData']);
             }
+            else if(richMessages[i]['representation'] == 'table'){
+              messageItem = new MessageItem(TableMessageComponent,'ChatBot',richMessages[i]['tableData']);
+            }
+            else if(richMessages[i]['representation'] == 'sessionId'){
+              messageItem = new MessageItem(TextMessageComponent,'ChatBot',"Chat Reference : " + this.sessionId);
+            }
             else{
-              messageItem = new MessageItem(TextMessageComponent,'ChatBot',richMessages[i]);
+              messageItem = new MessageItem(TextMessageComponent,'ChatBot',JSON.stringify(richMessages[i]));
             }
             this.createMessage(messageItem);
           }
