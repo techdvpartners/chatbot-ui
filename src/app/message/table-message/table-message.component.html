@@ -6,7 +6,7 @@
       <p class="card-title">
         <b>{{ sender }}</b>
       </p>
-      <table border="2">
+      <table class="table">
         <tr>
           <th *ngFor="let headerCell of message.header">
             {{ headerCell }}
@@ -15,7 +15,7 @@
         <tr *ngFor="let row of message.rows">
           <td *ngFor="let rowCell of row">
             <div [ngSwitch]="isA(rowCell)">
-              <button class="btn btn-primary" *ngSwitchCase="'quickReply'" (click)="sendTextMessage(replaceType(rowCell))">{{ replaceType(rowCell) }}</button>
+              <button class="btn btn-primary" *ngSwitchCase="'quickReply'" (click)="sendTextMessage(replaceType(rowCell))" [disabled]="buttonStatus">{{ replaceType(rowCell) }}</button>
               <p *ngSwitchDefault>{{ rowCell }}</p>
             </div>
             

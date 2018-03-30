@@ -10,6 +10,7 @@ import { Subject } from 'rxjs/Subject';
 export class TableMessageComponent implements MessageComponent {
   @Input() sender;
   @Input() message;
+  buttonStatus;
   quickReplyValue: Subject<string> = new Subject();
   constructor() { }
 
@@ -23,5 +24,6 @@ export class TableMessageComponent implements MessageComponent {
 
   sendTextMessage(text: string){
     this.quickReplyValue.next(text);
+    this.buttonStatus = true;
   }
 }
