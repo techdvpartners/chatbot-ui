@@ -5,8 +5,8 @@ import { Chart } from 'chart.js';
 @Component({
   selector: 'app-graph-message',
   template: `<div [ngClass]="{
-              'card bg-success text-white': sender === 'ChatBot',
-              'card bg-light text-right': sender === 'You'
+              'card bg-success text-white text-right': sender === 'You',
+              'card bg-light': sender === 'ChatBot'
             }">
               <div class="card-body">
                 <p class="card-title">

@@ -4,8 +4,8 @@ import { MessageComponent } from '../message.component';
 @Component({
   selector: 'app-text-message',
   template: `<div [ngClass]="{
-              'card bg-success text-white': sender === 'ChatBot',
-              'card bg-light text-right': sender === 'You'
+              'card bg-success text-white text-right': sender === 'You',
+              'card bg-light': sender === 'ChatBot'
             }">
               <div class="card-body">
                 <p class="card-title">
