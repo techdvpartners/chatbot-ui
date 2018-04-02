@@ -40,7 +40,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('keepScrollDown') private scrollDownContainer: ElementRef;
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    //this.scrollToBottom();
   }
   scrollToBottom(): void {
     try {
@@ -57,7 +57,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     let componentRef = viewContainerRef.createComponent(componentFactory);
     (<MessageComponent>componentRef.instance).sender = messageItem.sender;
     (<MessageComponent>componentRef.instance).message = messageItem.message;
-
+    
     if(messageItem.messageType == TableMessageComponent){
       (<TableMessageComponent>componentRef.instance).quickReplyValue.subscribe(text => {
         this.textMessage = text;
@@ -65,6 +65,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
       });
     }
 
+    setTimeout(()=>this.scrollToBottom(),1);
   }
 
   sendRequest() {
