@@ -16,7 +16,12 @@ import { TableMessageComponent } from '../message/table-message/table-message.co
 export class ChatboxComponent implements OnInit, AfterViewChecked {
   textMessage: string;
   fileAsDataURL: any;
-  sessionId = Math.random();
+  date = new Date();
+  dd = this.date.getDate();
+  mm = this.date.getMonth()+1;
+  yyyy = this.date.getFullYear();
+  sessionId = this.yyyy + "-" + this.mm + "-" + this.dd + "-" + Math.floor(Math.random() * 999) + 101;
+  botTyping:boolean;
 
   constructor(private dialogFlowService: DialogFlowService, private componentFactoryResolver: ComponentFactoryResolver) { }
 
@@ -58,7 +63,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
         this.sendRequest();
       });
     }
-
+    
   }
 
   sendRequest() {
@@ -74,7 +79,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     var data = this.fileAsDataURL;
     this.fileAsDataURL = null;
     let messageItem = new MessageItem(TextMessageComponent,'You','Attachment Uploaded');
-    this.createMessage(messageItem)
+    this.createMessage(messageItem);
     var requestBodyWithEvent = {
       "lang": "en",
       "event": {
@@ -86,9 +91,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
       "sessionId": this.sessionId
     };
     this.queryAndHandleResponse(requestBodyWithEvent);
-  }
-  test(event){
-    console.log(event);
+
   }
   sendTextMessage() {
     var queryMessage = this.textMessage;
@@ -105,43 +108,50 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
 
   queryAndHandleResponse(requestBody){
     console.log(requestBody);
-    this.dialogFlowService.query(requestBody).subscribe(
-      response => {
-        console.log(response);
-        var responseMessages = response['result']['fulfillment']['messages'];
-        for (var message in responseMessages) {
-          let messageItem = new MessageItem(TextMessageComponent,'ChatBot',responseMessages[message]['speech']);
-          this.createMessage(messageItem);
-        }
-
-        if(response['result']['fulfillment']['data']!=null){
-          var richMessages = response['result']['fulfillment']['data'];
-          for(var i in richMessages){
-            let messageItem;
-            if(richMessages[i]['representation'] == 'graph'){
-              messageItem = new MessageItem(GraphMessageComponent,'ChatBot',{
-                "xAxis":richMessages[i]['graphData']['xAxis'],
-                "yAxis":richMessages[i]['graphData']['yAxis']
-              });
-            }
-            else if(richMessages[i]['representation'] == 'text'){
-              messageItem = new MessageItem(TextMessageComponent,'ChatBot',richMessages[i]['textData']);
-            }
-            else if(richMessages[i]['representation'] == 'table'){
-              messageItem = new MessageItem(TableMessageComponent,'ChatBot',richMessages[i]['tableData']);
-            }
-            else if(richMessages[i]['representation'] == 'sessionId'){
-              messageItem = new MessageItem(TextMessageComponent,'ChatBot',"Chat Reference : " + this.sessionId);
-            }
-            else{
-              messageItem = new MessageItem(TextMessageComponent,'ChatBot',JSON.stringify(richMessages[i]));
-            }
+    let delay = Math.floor(Math.random() * 3000) + 1000;
+    console.log("Delay in miniseconds: " + delay);
+    this.botTyping = true;
+    setTimeout(()=>{
+      this.dialogFlowService.query(requestBody).subscribe(
+        response => {
+          console.log(response);
+          
+          var responseMessages = response['result']['fulfillment']['messages'];
+          for (var message in responseMessages) {
+            let messageItem = new MessageItem(TextMessageComponent,'ChatBot',responseMessages[message]['speech']);
             this.createMessage(messageItem);
           }
 
+          if(response['result']['fulfillment']['data']!=null){
+            var richMessages = response['result']['fulfillment']['data'];
+            for(var i in richMessages){
+              let messageItem;
+              if(richMessages[i]['representation'] == 'graph'){
+                messageItem = new MessageItem(GraphMessageComponent,'ChatBot',{
+                  "xAxis":richMessages[i]['graphData']['xAxis'],
+                  "yAxis":richMessages[i]['graphData']['yAxis']
+                });
+              }
+              else if(richMessages[i]['representation'] == 'text'){
+                messageItem = new MessageItem(TextMessageComponent,'ChatBot',richMessages[i]['textData']);
+              }
+              else if(richMessages[i]['representation'] == 'table'){
+                messageItem = new MessageItem(TableMessageComponent,'ChatBot',richMessages[i]['tableData']);
+              }
+              else if(richMessages[i]['representation'] == 'sessionId'){
+                messageItem = new MessageItem(TextMessageComponent,'ChatBot',"Chat Reference : " + this.sessionId);
+              }
+              else{
+                messageItem = new MessageItem(TextMessageComponent,'ChatBot',JSON.stringify(richMessages[i]));
+              }
+              this.createMessage(messageItem);
+            }
+
+          }
         }
-      }
-    );
+      );
+      this.botTyping = false;
+    },delay);
   }
 
   onFileChange(event) {

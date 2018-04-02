@@ -3,6 +3,9 @@
 
 <div #keepScrollDown class="container-fluid position-fixed" id="chatDisplay" style="overflow-y: scroll; height: 90%;">
   <ng-template message-host></ng-template>
+  <div *ngIf="botTyping" class="alert alert-secondary" role="alert">
+    Bot is typing ...
+  </div>
 </div>
 
 <div class="container-fluid input-group fixed-bottom" id="chatInput">
