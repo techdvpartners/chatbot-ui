@@ -15,7 +15,7 @@ then
 
 	gcloud compute ssh instance-1
 else
-	echo "DEPLOYING ON DEV"
+	echo "DEPLOYING ON TEST"
 	ng build
 	sudo rm -rf /var/www/html/*
 	sudo mv dist/* /var/www/html/

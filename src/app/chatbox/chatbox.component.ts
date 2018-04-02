@@ -20,7 +20,8 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
   dd = this.date.getDate();
   mm = this.date.getMonth()+1;
   yyyy = this.date.getFullYear();
-  sessionId = this.yyyy + "-" + this.mm + "-" + this.dd + "-" + Math.floor(Math.random() * 999) + 101;
+  randomNumber = Math.floor(Math.random() * 999) + 101
+  sessionId = this.yyyy + "-" + this.mm + "-" + this.dd + "-" + this.randomNumber;
   botTyping:boolean;
 
   constructor(private dialogFlowService: DialogFlowService, private componentFactoryResolver: ComponentFactoryResolver) { }
@@ -63,7 +64,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
         this.sendRequest();
       });
     }
-    
+
   }
 
   sendRequest() {
@@ -148,9 +149,9 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
             }
 
           }
+          this.botTyping = false;
         }
       );
-      this.botTyping = false;
     },delay);
   }
 
