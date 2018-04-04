@@ -110,7 +110,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
 
   queryAndHandleResponse(requestBody){
     console.log(requestBody);
-    let delay = Math.floor(Math.random() * 3000) + 1000;
+    let delay = Math.floor(Math.random() * 2000) + 1000;
     console.log("Delay in miniseconds: " + delay);
     this.botTyping = true;
     setTimeout(()=>{
@@ -131,7 +131,8 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
               if(richMessages[i]['representation'] == 'graph'){
                 messageItem = new MessageItem(GraphMessageComponent,'ChatBot',{
                   "xAxis":richMessages[i]['graphData']['xAxis'],
-                  "yAxis":richMessages[i]['graphData']['yAxis']
+                  "yAxis":richMessages[i]['graphData']['yAxis'],
+                  "title":richMessages[i]['graphData']['title']
                 });
               }
               else if(richMessages[i]['representation'] == 'text'){

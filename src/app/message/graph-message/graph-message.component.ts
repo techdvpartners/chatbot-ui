@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { MessageComponent } from '../message.component';
 import { Chart } from 'chart.js';
 
@@ -13,24 +13,26 @@ import { Chart } from 'chart.js';
                   <b>{{ sender }}</b>
                 </p>
                 <div>
-                  <canvas id="canvas">{{ chart }}</canvas>
+                  <canvas [id]="message['title']">{{ chart }}</canvas>
                 </div>
               </div>
             </div>`,
   styleUrls: ['./graph-message.component.css']
 })
-export class GraphMessageComponent implements MessageComponent {
+export class GraphMessageComponent implements MessageComponent, AfterViewInit {
   @Input() sender;
   @Input() message;
   chart=[];
-  constructor() { }
+  constructor() {
+    
+  }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.createChart();
   }
 
   createChart(){
-    this.chart = new Chart('canvas', {
+    this.chart = new Chart(this.message.title, {
       type: 'line',
       data: {
         labels: this.message.xAxis,

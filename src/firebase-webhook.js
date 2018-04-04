@@ -8,8 +8,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
   if (request.body.result) {
     processV1Request(request, response);
-  } else if (request.body.queryResult) {
-    processV2Request(request, response);
   } else {
     console.log('Invalid Request');
     return response.status(400).end('Invalid Webhook Request (expecting v1 or v2 webhook request)');
@@ -50,22 +48,68 @@ function processV1Request (request, response) {
       var buffer = new Buffer(base64Data, 'base64');
       var data = buffer.toString('utf8');
       var dataArray = data.split('\n');
-      var xAxis = [];
-      var yAxis = [];
+
+      var mapConsumptionByMonth = {};
+      var xAxisConsumptionByMonth = [];
+      var yAxisConsumptionByMonth = [];
+
+      var mapConsumptionByDay = {};
+      var xAxisConsumptionByDay = [];
+      var yAxisConsumptionByDay = [];
+
+      var mapConsumptionByHour = {};
+      var xAxisConsumptionByHour = [];
+      var yAxisConsumptionByHour = [];
+      
       for(var i in dataArray){
-          var x = dataArray[i].split(',')[0];
-          var y = dataArray[i].split(',')[1];
+          var dateTime = new Date(dataArray[i].split(',')[0]);
+          var consumption = dataArray[i].split(',')[1];
           
-          xAxis.push(x);
-          yAxis.push(y);
+          addValueToListInMap(mapConsumptionByMonth, dateTime.getMonth(), consumption);
+          addValueToListInMap(mapConsumptionByDay, dateTime.getDay(), consumption);
+          addValueToListInMap(mapConsumptionByHour, dateTime.getHours(), consumption);
       }
+
+      for(var month in mapConsumptionByMonth){
+        xAxisConsumptionByMonth.push(month);
+        yAxisConsumptionByMonth.push(getAverage(mapConsumptionByMonth[month]));
+      }
+
+      for(var day in mapConsumptionByDay){
+        xAxisConsumptionByDay.push(day);
+        yAxisConsumptionByDay.push(getAverage(mapConsumptionByDay[day]));
+      }
+
+      for(var hour in mapConsumptionByHour){
+        xAxisConsumptionByHour.push(hour);
+        yAxisConsumptionByHour.push(getAverage(mapConsumptionByHour[hour]));
+      }
+
+
       let responseToUser = {
         data: [
           {
             "representation":"graph",
             "graphData" : {
-              "xAxis":xAxis,
-              "yAxis":yAxis
+              "xAxis":xAxisConsumptionByMonth,
+              "yAxis":yAxisConsumptionByMonth,
+              "title":"Consumption by Month"
+            }
+          },
+          {
+            "representation":"graph",
+            "graphData" : {
+              "xAxis":xAxisConsumptionByDay,
+              "yAxis":yAxisConsumptionByDay,
+              "title":"Consumption by Weekday"
+            }
+          },
+          {
+            "representation":"graph",
+            "graphData" : {
+              "xAxis":xAxisConsumptionByHour,
+              "yAxis":yAxisConsumptionByHour,
+              "title":"Consumption by Time of Day"
             }
           },
           {
@@ -125,4 +169,19 @@ function processV1Request (request, response) {
       response.json(responseJson); // Send response to Dialogflow
     }
   }
+}
+
+function addValueToListInMap(map, key, value) {
+  map[key] = map[key] || [];
+  map[key].push(value);
+}
+
+function getAverage(array){
+  var sum = 0;
+  for( var i = 0; i < array.length; i++ ){
+    sum += parseInt( array[i], 10 ); //don't forget to add the base
+  }
+
+  var avg = sum/array.length;
+  return avg;
 }
