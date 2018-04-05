@@ -71,17 +71,17 @@ function processV1Request (request, response) {
       }
 
       for(var month in mapConsumptionByMonth){
-        xAxisConsumptionByMonth.push(month);
+        xAxisConsumptionByMonth.push(getMonthName(parseInt(month)));
         yAxisConsumptionByMonth.push(getAverage(mapConsumptionByMonth[month]));
       }
 
       for(var day in mapConsumptionByDay){
-        xAxisConsumptionByDay.push(day);
+        xAxisConsumptionByDay.push(getDayName(parseInt(day)));
         yAxisConsumptionByDay.push(getAverage(mapConsumptionByDay[day]));
       }
 
       for(var hour in mapConsumptionByHour){
-        xAxisConsumptionByHour.push(hour);
+        xAxisConsumptionByHour.push(getHourFormat(parseInt(hour)));
         yAxisConsumptionByHour.push(getAverage(mapConsumptionByHour[hour]));
       }
 
@@ -184,4 +184,65 @@ function getAverage(array){
 
   var avg = sum/array.length;
   return avg;
+}
+
+function getMonthName(num){
+  switch(num) {
+    case 0:
+      return "January";
+    case 1:
+      return "February";
+    case 2:
+      return "March";
+    case 3:
+      return "April";
+    case 4:
+      return "May";
+    case 5:
+      return "June";
+    case 6:
+      return "July";
+    case 7:
+      return "August";
+    case 8:
+      return "September";
+    case 9:
+      return "October";
+    case 10:
+      return "November";
+    case 11:
+      return "December";      
+    default:
+      return "";
+  }
+}
+
+function getDayName(num){
+  switch(num) {
+    case 0:
+      return "Sunday";
+    case 1:
+      return "Monday";
+    case 2:
+      return "Tuesday";
+    case 3:
+      return "Wednesday";
+    case 4:
+      return "Thursday";
+    case 5:
+      return "Friday";
+    case 6:
+      return "Saturday";    
+    default:
+      return "";
+  }
+}
+
+function getHourFormat(num){
+  if(num>=0 && num<=23){
+    return num + ":00"
+  }
+  else{
+    return "";
+  }
 }
