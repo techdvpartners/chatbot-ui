@@ -1,5 +1,6 @@
 'use strict';
 var fs = require('fs');
+var nodemailer = require("nodemailer");
 
 const functions = require('firebase-functions'); // Cloud Functions for Firebase library
 const DialogflowApp = require('actions-on-google').DialogflowApp; // Google Assistant helper library
@@ -14,14 +15,14 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   }
 });
 
-function processV1Request (request, response) {
+function processV1Request(request, response) {
   let action = request.body.result.action; // https://dialogflow.com/docs/actions-and-parameters
   let parameters = request.body.result.parameters; // https://dialogflow.com/docs/actions-and-parameters
   let inputContexts = request.body.result.contexts; // https://dialogflow.com/docs/contexts
   let messages = request.body.result.fulfillment.messages;
   let requestSource = (request.body.originalRequest) ? request.body.originalRequest.source : undefined;
   const googleAssistantRequest = 'google'; // Constant to identify Google Assistant requests
-  const app = new DialogflowApp({request: request, response: response});
+  const app = new DialogflowApp({ request: request, response: response });
   // Create handlers for Dialogflow actions as well as a 'default' handler
   const actionHandlers = {
     'default': () => {
@@ -31,7 +32,7 @@ function processV1Request (request, response) {
       let responseToUser = {
         data: [
           {
-            "representation":"sessionId",
+            "representation": "sessionId",
           }
         ],
         messages: messages,
@@ -60,27 +61,27 @@ function processV1Request (request, response) {
       var mapConsumptionByHour = {};
       var xAxisConsumptionByHour = [];
       var yAxisConsumptionByHour = [];
-      
-      for(var i in dataArray){
-          var dateTime = new Date(dataArray[i].split(',')[0]);
-          var consumption = dataArray[i].split(',')[1];
-          
-          addValueToListInMap(mapConsumptionByMonth, dateTime.getMonth(), consumption);
-          addValueToListInMap(mapConsumptionByDay, dateTime.getDay(), consumption);
-          addValueToListInMap(mapConsumptionByHour, dateTime.getHours(), consumption);
+
+      for (var i in dataArray) {
+        var dateTime = new Date(dataArray[i].split(',')[0]);
+        var consumption = dataArray[i].split(',')[1];
+
+        addValueToListInMap(mapConsumptionByMonth, dateTime.getMonth(), consumption);
+        addValueToListInMap(mapConsumptionByDay, dateTime.getDay(), consumption);
+        addValueToListInMap(mapConsumptionByHour, dateTime.getHours(), consumption);
       }
 
-      for(var month in mapConsumptionByMonth){
+      for (var month in mapConsumptionByMonth) {
         xAxisConsumptionByMonth.push(getMonthName(parseInt(month)));
         yAxisConsumptionByMonth.push(getAverage(mapConsumptionByMonth[month]));
       }
 
-      for(var day in mapConsumptionByDay){
+      for (var day in mapConsumptionByDay) {
         xAxisConsumptionByDay.push(getDayName(parseInt(day)));
         yAxisConsumptionByDay.push(getAverage(mapConsumptionByDay[day]));
       }
 
-      for(var hour in mapConsumptionByHour){
+      for (var hour in mapConsumptionByHour) {
         xAxisConsumptionByHour.push(getHourFormat(parseInt(hour)));
         yAxisConsumptionByHour.push(getAverage(mapConsumptionByHour[hour]));
       }
@@ -89,45 +90,45 @@ function processV1Request (request, response) {
       let responseToUser = {
         data: [
           {
-            "representation":"graph",
-            "graphData" : {
-              "xAxis":xAxisConsumptionByMonth,
-              "yAxis":yAxisConsumptionByMonth,
-              "title":"Consumption by Month"
+            "representation": "graph",
+            "graphData": {
+              "xAxis": xAxisConsumptionByMonth,
+              "yAxis": yAxisConsumptionByMonth,
+              "title": "Consumption by Month"
             }
           },
           {
-            "representation":"graph",
-            "graphData" : {
-              "xAxis":xAxisConsumptionByDay,
-              "yAxis":yAxisConsumptionByDay,
-              "title":"Consumption by Weekday"
+            "representation": "graph",
+            "graphData": {
+              "xAxis": xAxisConsumptionByDay,
+              "yAxis": yAxisConsumptionByDay,
+              "title": "Consumption by Weekday"
             }
           },
           {
-            "representation":"graph",
-            "graphData" : {
-              "xAxis":xAxisConsumptionByHour,
-              "yAxis":yAxisConsumptionByHour,
-              "title":"Consumption by Time of Day"
+            "representation": "graph",
+            "graphData": {
+              "xAxis": xAxisConsumptionByHour,
+              "yAxis": yAxisConsumptionByHour,
+              "title": "Consumption by Time of Day"
             }
           },
           {
-            "representation":"text",
+            "representation": "text",
             "textData": "Based on the information provided, we can offer you the following options."
           },
           {
-            "representation":"table",
-            "tableData":{
-              "header":["QuoteID - 101202303","Lock In","Pricing","Peak","Off Peak","Shoulder","Estimated Monthly Bill","Potential Mismatch charge*"],
-              "rows":[
-                ["quickReply:30 Day Rolling", "30 days", "Variable*","10.0p","10.0p","10.0p","",""],
-                ["quickReply:Night Owl 1", "12 months", "Fixed","11.0p","5.0p","7.0p","£100","£10"],
-                ["quickReply:Night Owl 2", "24 months", "Fixed","11.5p","5.5p","7.5p","£105","£10"],
-                ["quickReply:Night Owl 3", "36 months", "Fixed","12.0p","5.5p","7.5p","£110","£10"],
-                ["quickReply:Balanced 1", "12 months", "Fixed","12.0p","8.0p","5.0p","£110","£0"],
-                ["quickReply:Balanced 2", "24 months", "Fixed","12.1p","8.1p","5.2p","£112","£0"],
-                ["quickReply:Balanced 3", "36 months", "Fixed","12.2p","8.2p","5.2p","£115","£0"]
+            "representation": "table",
+            "tableData": {
+              "header": ["QuoteID - 101202303", "Lock In", "Pricing", "Peak", "Off Peak", "Shoulder", "Estimated Monthly Bill", "Potential Mismatch charge*"],
+              "rows": [
+                ["quickReply:30 Day Rolling", "30 days", "Variable*", "10.0p", "10.0p", "10.0p", "", ""],
+                ["quickReply:Night Owl 1", "12 months", "Fixed", "11.0p", "5.0p", "7.0p", "£100", "£10"],
+                ["quickReply:Night Owl 2", "24 months", "Fixed", "11.5p", "5.5p", "7.5p", "£105", "£10"],
+                ["quickReply:Night Owl 3", "36 months", "Fixed", "12.0p", "5.5p", "7.5p", "£110", "£10"],
+                ["quickReply:Balanced 1", "12 months", "Fixed", "12.0p", "8.0p", "5.0p", "£110", "£0"],
+                ["quickReply:Balanced 2", "24 months", "Fixed", "12.1p", "8.1p", "5.2p", "£112", "£0"],
+                ["quickReply:Balanced 3", "36 months", "Fixed", "12.2p", "8.2p", "5.2p", "£115", "£0"]
               ]
             }
           }
@@ -139,6 +140,30 @@ function processV1Request (request, response) {
         text: messages[0].speech
       };
       sendResponse(responseToUser);
+    },
+    'email': () => {
+      var smtpTransport = nodemailer.createTransport({
+        service: "Yahoo",
+        auth: {
+          user: "tech.dvpartners@yahoo.com",
+          pass: "*********"
+        }
+      });
+      var mailOptions = {
+        from: "Technology DVPartners ✔ <tech.dvpartners@yahoo.com>",
+        to: request.body.result.parameters.email,
+        subject: request.body.result.parameters.TariffPlan,
+        text: "You have selected " + request.body.result.parameters.TariffPlan + ". This is the most bakwaas plan I have ever seen.",
+        html: "<b>You have selected " + request.body.result.parameters.TariffPlan + ". This is the most bakwaas plan I have ever seen. But still since you have selected it, please go ahaed with the payment.</b>"
+      }
+      smtpTransport.sendMail(mailOptions, function (error, response) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Message sent: " + JSON.stringify(response));
+        }
+        smtpTransport.close();
+      });
     }
   };
   // If undefined or unknown action use the default handler
@@ -147,7 +172,7 @@ function processV1Request (request, response) {
   }
   // Run the proper handler function to handle the request from Dialogflow
   actionHandlers[action]();
-  function sendResponse (responseToUser) {
+  function sendResponse(responseToUser) {
     // if the response is a string send it as a response to the user
     if (typeof responseToUser === 'string') {
       let responseJson = {};
@@ -176,18 +201,18 @@ function addValueToListInMap(map, key, value) {
   map[key].push(value);
 }
 
-function getAverage(array){
+function getAverage(array) {
   var sum = 0;
-  for( var i = 0; i < array.length; i++ ){
-    sum += parseInt( array[i], 10 ); //don't forget to add the base
+  for (var i = 0; i < array.length; i++) {
+    sum += parseInt(array[i], 10); //don't forget to add the base
   }
 
-  var avg = sum/array.length;
+  var avg = sum / array.length;
   return avg;
 }
 
-function getMonthName(num){
-  switch(num) {
+function getMonthName(num) {
+  switch (num) {
     case 0:
       return "January";
     case 1:
@@ -211,14 +236,14 @@ function getMonthName(num){
     case 10:
       return "November";
     case 11:
-      return "December";      
+      return "December";
     default:
       return "";
   }
 }
 
-function getDayName(num){
-  switch(num) {
+function getDayName(num) {
+  switch (num) {
     case 0:
       return "Sunday";
     case 1:
@@ -232,17 +257,17 @@ function getDayName(num){
     case 5:
       return "Friday";
     case 6:
-      return "Saturday";    
+      return "Saturday";
     default:
       return "";
   }
 }
 
-function getHourFormat(num){
-  if(num>=0 && num<=23){
+function getHourFormat(num) {
+  if (num >= 0 && num <= 23) {
     return num + ":00"
   }
-  else{
+  else {
     return "";
   }
 }
