@@ -153,8 +153,8 @@ function processV1Request(request, response) {
         from: "Technology DVPartners ✔ <tech.dvpartners@yahoo.com>",
         to: request.body.result.parameters.email,
         subject: request.body.result.parameters.TariffPlan,
-        text: "You have selected " + request.body.result.parameters.TariffPlan + ". This is the most bakwaas plan I have ever seen.",
-        html: "<b>You have selected " + request.body.result.parameters.TariffPlan + ". This is the most bakwaas plan I have ever seen. But still since you have selected it, please go ahaed with the payment.</b>"
+        text: "You have selected " + request.body.result.parameters.TariffPlan + ". Please go ahaed with the payment.</b>",
+        html: "<b>You have selected " + request.body.result.parameters.TariffPlan + ". Please go ahaed with the payment.</b>"
       }
       smtpTransport.sendMail(mailOptions, function (error, response) {
         if (error) {
