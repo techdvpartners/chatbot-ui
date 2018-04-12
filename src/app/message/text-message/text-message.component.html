@@ -1,0 +1,11 @@
+<div [ngClass]="{
+    'bg-success text-white text-right': sender === 'You',
+    'bg-light': sender === 'ChatBot'
+}" class="card round">
+    <div class="card-body">
+        <p class="card-title">
+            <b>{{ sender }}</b>
+        </p>
+        <p class="card-text">{{ message }}</p>
+    </div>
+</div>

@@ -15,7 +15,12 @@ import { TableMessageComponent } from '../message/table-message/table-message.co
 })
 export class ChatboxComponent implements OnInit, AfterViewChecked {
   textMessage: string;
+
+  @ViewChild('attachment')
+  attachment: any;
+  
   fileAsDataURL: any;
+
   date = new Date();
   dd = this.date.getDate();
   mm = this.date.getMonth()+1;
@@ -79,7 +84,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
 
   sendEvent() {
     var data = this.fileAsDataURL;
-    this.fileAsDataURL = null;
+    this.clearFileSelection();
     let messageItem = new MessageItem(TextMessageComponent,'You','Attachment Uploaded');
     this.createMessage(messageItem);
     var requestBodyWithEvent = {
@@ -168,6 +173,10 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
       };
 
     }
+  }
+  clearFileSelection(){
+    this.attachment.nativeElement.value="";
+    this.fileAsDataURL = null;
   }
 
 }

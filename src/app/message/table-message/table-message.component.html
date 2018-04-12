@@ -1,27 +1,30 @@
 <div [ngClass]="{
-    'card bg-success text-white text-right': sender === 'You',
-    'card bg-light': sender === 'ChatBot'
-  }">
-    <div class="card-body">
-      <p class="card-title">
-        <b>{{ sender }}</b>
-      </p>
-      <table class="table">
+  'bg-success text-white text-right': sender === 'You',
+  'bg-light': sender === 'ChatBot'
+}" class="card round">
+<div class="card-body table-responsive-sm">
+  <p class="card-title">
+    <b>{{ sender }}</b>
+  </p>
+  
+    <table class="table table-striped">
+      <thead>
         <tr>
-          <th *ngFor="let headerCell of message.header">
+          <th scope="col" *ngFor="let headerCell of message.header">
             {{ headerCell }}
           </th>
         </tr>
+      </thead>
+      <tbody>
         <tr *ngFor="let row of message.rows">
           <td *ngFor="let rowCell of row">
             <div [ngSwitch]="isA(rowCell)">
               <button class="btn btn-primary" *ngSwitchCase="'quickReply'" (click)="sendTextMessage(replaceType(rowCell))" [disabled]="buttonStatus">{{ replaceType(rowCell) }}</button>
               <p *ngSwitchDefault>{{ rowCell }}</p>
             </div>
-            
-            
           </td>
         </tr>
-      </table>
-    </div>
-  </div>
+      </tbody>
+    </table>
+</div>
+</div>

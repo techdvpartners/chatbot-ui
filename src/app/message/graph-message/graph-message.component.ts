@@ -4,19 +4,7 @@ import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-graph-message',
-  template: `<div [ngClass]="{
-              'card bg-success text-white text-right': sender === 'You',
-              'card bg-light': sender === 'ChatBot'
-            }">
-              <div class="card-body">
-                <p class="card-title">
-                  <b>{{ sender }}</b>
-                </p>
-                <div>
-                  <canvas [id]="message['title']">{{ chart }}</canvas>
-                </div>
-              </div>
-            </div>`,
+  templateUrl: './graph-message.component.html',
   styleUrls: ['./graph-message.component.css']
 })
 export class GraphMessageComponent implements MessageComponent, AfterViewInit {

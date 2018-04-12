@@ -1,0 +1,8 @@
+.tri-right.right-in:after{
+	content: ' ';
+	position: absolute;
+	right: -20px;
+  	top: 30%;
+	border: 12px solid;
+	border-color: rgb(223, 226, 226) transparent transparent lightyellow;
+}

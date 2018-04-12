@@ -3,17 +3,7 @@ import { MessageComponent } from '../message.component';
 
 @Component({
   selector: 'app-text-message',
-  template: `<div [ngClass]="{
-              'card bg-success text-white text-right': sender === 'You',
-              'card bg-light': sender === 'ChatBot'
-            }">
-              <div class="card-body">
-                <p class="card-title">
-                  <b>{{ sender }}</b>
-                </p>
-                <p class="card-text">{{ message }}</p>
-              </div>
-            </div>`,
+  templateUrl: './text-message.component.html',
   styleUrls: ['./text-message.component.css']
 })
 export class TextMessageComponent implements MessageComponent {

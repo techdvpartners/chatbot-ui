@@ -1,3 +1,13 @@
-<p>
-  graph-message works!
-</p>
+<div [ngClass]="{
+    'bg-success text-white text-right': sender === 'You',
+    'bg-light': sender === 'ChatBot'
+  }" class="card round">
+    <div class="card-body">
+        <p class="card-title">
+            <b>{{ sender }}</b>
+        </p>
+        <div>
+            <canvas [id]="message['title']">{{ chart }}</canvas>
+        </div>
+    </div>
+</div>
