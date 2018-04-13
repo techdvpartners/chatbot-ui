@@ -4,14 +4,8 @@ import { ChatboxComponent } from './chatbox/chatbox.component';
 import { ModalviewComponent } from './modalview/modalview.component';
 
 const routes: Routes = [
-  {
-    path: 'fullview',
-    component: ChatboxComponent 
-  },
-  {
-    path: 'modalview',
-    component: ModalviewComponent 
-  }
+  { path: 'fullview', component: ChatboxComponent },
+  { path: '', component: ModalviewComponent }
 ];
 
 @NgModule({
