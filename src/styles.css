@@ -3,3 +3,21 @@
     border-radius: 30px;
     margin: 10px;
 }
+
+.tri-right.right-in:after{
+	content: ' ';
+	position: absolute;
+	right: -25px;
+  	top: 30%;
+	border: 12px solid;
+	border-color: #28a745 transparent transparent #28a745;
+}
+
+.tri-left.left-in:after{
+	content: ' ';
+	position: absolute;
+  	left: -25px;
+  	top: 30%;
+	border: 12px solid;
+	border-color: #f8f9fa #f8f9fa transparent transparent;
+}

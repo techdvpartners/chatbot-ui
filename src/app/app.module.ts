@@ -10,6 +10,8 @@ import { MessageComponent } from './message/message.component';
 import { TextMessageComponent } from './message/text-message/text-message.component';
 import { GraphMessageComponent } from './message/graph-message/graph-message.component';
 import { TableMessageComponent } from './message/table-message/table-message.component';
+import { AppRoutingModule } from './/app-routing.module';
+import { ModalviewComponent } from './modalview/modalview.component';
 
 
 @NgModule({
@@ -20,12 +22,14 @@ import { TableMessageComponent } from './message/table-message/table-message.com
     MessageDirective,
     TextMessageComponent,
     GraphMessageComponent,
-    TableMessageComponent
+    TableMessageComponent,
+    ModalviewComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   providers: [DialogFlowService],
   bootstrap: [AppComponent]
