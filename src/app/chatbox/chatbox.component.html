@@ -1,16 +1,16 @@
-<div class="container">
-  <div class="container" #keepScrollDown id="chatDisplay" style="overflow: auto; height: 500px;">
+<div class="container" style="height: 100%; background-color:gainsboro">
+  <div class="container" #keepScrollDown id="chatDisplay" style="overflow: auto; height: 85%;">
     <ng-template message-host></ng-template>
     <div class="row justify-content-center">
       <span class="align-self-center" *ngIf="botTyping" class="badge badge-primary">Bot is typing ...</span>
     </div>
   </div>
 
-  <div class="container" id="chatInput">
+  <div class="container" id="chatInput" style="height: 15%;">
     <input type="text" id="textMessage" [(ngModel)]="textMessage" class="form-control" (keydown.enter)="sendRequest()">
     <div class="input-group-append">
       <input type="file" id="attachment" (change)="onFileChange($event)" #attachment>
-      <button class="btn" type="button" (click)="clearFileSelection()">Clear</button>
+      <button class="btn btn-secondary" type="button" (click)="clearFileSelection()">Clear</button>
       <button class="btn btn-primary" type="button" (click)="sendRequest()">Send</button>
     </div>
   </div>

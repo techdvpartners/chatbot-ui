@@ -1,8 +1,8 @@
-<div class="btn-group dropup fixed-bottom p-2">
+<div class="btn-group dropup sticky-bottom p-2">
   <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Chat
   </button>
-  <div class="dropdown-menu" (click)="$event.stopPropagation()">
+  <div class="dropdown-menu"  style="height: 600px" (click)="$event.stopPropagation()">
     <app-chatbox></app-chatbox>
   </div>
 </div>
