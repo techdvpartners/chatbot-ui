@@ -175,6 +175,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     }
   }
   clearFileSelection(){
+    this.textMessage = "";
     this.attachment.nativeElement.value="";
     this.fileAsDataURL = null;
   }
