@@ -1,10 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom">
-  <div class="btn-group dropup">
-    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Chat
-    </button>
-    <div class="dropdown-menu" (click)="$event.stopPropagation()">
-      <app-chatbox></app-chatbox>
-    </div>
+<div class="btn-group dropup fixed-bottom p-2">
+  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Chat
+  </button>
+  <div class="dropdown-menu" (click)="$event.stopPropagation()">
+    <app-chatbox></app-chatbox>
   </div>
-</nav>
+</div>
