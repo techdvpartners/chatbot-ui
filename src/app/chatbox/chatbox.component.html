@@ -1,11 +1,11 @@
 <div class="container" #keepScrollDown id="chatDisplay" style="overflow: auto; height: 80%;">
   <ng-template message-host></ng-template>
   <div class="row justify-content-center">
-    <span class="align-self-center" *ngIf="botTyping" class="badge badge-primary">Bot is typing ...</span>
+    <span *ngIf="botTyping" class="badge badge-primary">Bot is typing ...</span>
   </div>
 </div>
 
-<div class="container" id="chatInput">
+<div class="container fixed-bottom" id="chatInput">
   <div class="row input-group m-1">
     <input type="text" class="form-control" placeholder="Type your message here..." id="textMessage" [(ngModel)]="textMessage"
       (keydown.enter)="sendRequest()">
