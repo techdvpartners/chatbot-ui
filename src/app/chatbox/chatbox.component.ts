@@ -80,11 +80,11 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     if (this.fileAsDataURL != '' && this.fileAsDataURL != null) {
       this.sendEvent();
     }
+    this.clearFileSelection();
   }
 
   sendEvent() {
     var data = this.fileAsDataURL;
-    this.clearFileSelection();
     let messageItem = new MessageItem(TextMessageComponent,'You','Attachment Uploaded');
     this.createMessage(messageItem);
     var requestBodyWithEvent = {
@@ -102,7 +102,6 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
   }
   sendTextMessage() {
     var queryMessage = this.textMessage;
-    this.textMessage = '';
     let messageItem = new MessageItem(TextMessageComponent,'You',queryMessage);
     this.createMessage(messageItem);
     var requestBodyWithText = {
@@ -171,13 +170,21 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
       reader.onload = () => {
         this.fileAsDataURL = reader.result;
       };
-
     }
   }
   clearFileSelection(){
     this.textMessage = "";
     this.attachment.nativeElement.value="";
     this.fileAsDataURL = null;
+  }
+
+  getFileName(){
+    if(this.attachment.nativeElement.value){
+      return this.attachment.nativeElement.value;
+    }
+    else{
+      return "Choose File";
+    }
   }
 
 }
