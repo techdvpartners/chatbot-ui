@@ -28,6 +28,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
   randomNumber = Math.floor(Math.random() * 999) + 101
   sessionId = this.yyyy + "-" + this.mm + "-" + this.dd + "-" + this.randomNumber;
   botTyping:boolean;
+  attachmentUploading:boolean = false;
 
   constructor(private dialogFlowService: DialogFlowService, private componentFactoryResolver: ComponentFactoryResolver) { }
 
@@ -49,7 +50,10 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
   }
   scrollToBottom(): void {
     try {
-      this.scrollDownContainer.nativeElement.scrollTop = this.scrollDownContainer.nativeElement.scrollHeight;
+      //TODO (mohak) This is a cheap hack for scrolling the chat window to bottom. Need to find out better solution for this.
+      setTimeout(()=>{
+        this.scrollDownContainer.nativeElement.scrollTop = this.scrollDownContainer.nativeElement.scrollHeight;
+      },1);
     } catch (err) {
       console.log(err);
     }
@@ -70,8 +74,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
       });
     }
 
-    //TODO (mohak) This is a cheap hack for scrolling the chat window to bottom. Need to find out better solution for this.
-    setTimeout(()=>this.scrollToBottom(),1);
+    this.scrollToBottom();
   }
 
   sendRequest() {
@@ -86,24 +89,28 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
 
   sendEvent() {
     var data = this.fileAsDataURL;
-
+    
     //TODO (mohak) This additional delay is for showing user that graph processing is taking time. This is a chutiyapa from client not developer.
+    let delay:number = 4000;
+    console.log("Graph Processing delay of : " + delay/1000 + " seconds.");
+    this.attachmentUploading = true;
+    this.scrollToBottom();
     setTimeout(()=>{
       let messageItem = new MessageItem(TextMessageComponent,'You','Attachment Uploaded');
       this.createMessage(messageItem);
-    },1500);
-
-    var requestBodyWithEvent = {
-      "lang": "en",
-      "event": {
-        "name": "file-upload",
-        "data":{
-          "dataUrl":data
-        }
-      },
-      "sessionId": this.sessionId
-    };
-    this.queryAndHandleResponse(requestBodyWithEvent);
+      var requestBodyWithEvent = {
+        "lang": "en",
+        "event": {
+          "name": "file-upload",
+          "data":{
+            "dataUrl":data
+          }
+        },
+        "sessionId": this.sessionId
+      };
+      this.queryAndHandleResponse(requestBodyWithEvent);
+      this.attachmentUploading = false;
+    },delay);
   }
   sendTextMessage() {
     var queryMessage = this.textMessage;
