@@ -70,6 +70,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
       });
     }
 
+    //TODO (mohak) This is a cheap hack for scrolling the chat window to bottom. Need to find out better solution for this.
     setTimeout(()=>this.scrollToBottom(),1);
   }
 
@@ -85,8 +86,13 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
 
   sendEvent() {
     var data = this.fileAsDataURL;
-    let messageItem = new MessageItem(TextMessageComponent,'You','Attachment Uploaded');
-    this.createMessage(messageItem);
+
+    //TODO (mohak) This additional delay is for showing user that graph processing is taking time. This is a chutiyapa from client not developer.
+    setTimeout(()=>{
+      let messageItem = new MessageItem(TextMessageComponent,'You','Attachment Uploaded');
+      this.createMessage(messageItem);
+    },1500);
+
     var requestBodyWithEvent = {
       "lang": "en",
       "event": {
@@ -98,7 +104,6 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
       "sessionId": this.sessionId
     };
     this.queryAndHandleResponse(requestBodyWithEvent);
-
   }
   sendTextMessage() {
     var queryMessage = this.textMessage;
@@ -117,6 +122,8 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     let delay = Math.floor(Math.random() * 2000) + 1000;
     console.log("Delay in miniseconds: " + delay);
     this.botTyping = true;
+
+    //TODO (mohak) This is intentional delay. Should have been handled from Dialogflow but feature not present at the time of writing.
     setTimeout(()=>{
       this.dialogFlowService.query(requestBody).subscribe(
         response => {

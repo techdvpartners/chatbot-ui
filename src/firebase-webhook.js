@@ -146,15 +146,15 @@ function processV1Request(request, response) {
         service: "Yahoo",
         auth: {
           user: "tech.dvpartners@yahoo.com",
-          pass: "*********"
+          pass: "***********"
         }
       });
       var mailOptions = {
         from: "Technology DVPartners ✔ <tech.dvpartners@yahoo.com>",
         to: request.body.result.parameters.email,
         subject: request.body.result.parameters.TariffPlan,
-        text: "You have selected " + request.body.result.parameters.TariffPlan + ". Please go ahaed with the payment.</b>",
-        html: "<b>You have selected " + request.body.result.parameters.TariffPlan + ". Please go ahaed with the payment.</b>"
+        text: "You have selected " + request.body.result.parameters.TariffPlan + ". Please go ahead with the payment.",
+        html: "You have selected " + request.body.result.parameters.TariffPlan + ". Please go ahead with the payment."
       }
       smtpTransport.sendMail(mailOptions, function (error, response) {
         if (error) {
