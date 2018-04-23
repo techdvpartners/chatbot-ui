@@ -90,9 +90,9 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
   sendEvent() {
     var data = this.fileAsDataURL;
     
-    //TODO (mohak) This additional delay is for showing user that graph processing is taking time. This is a chutiyapa from client not developer.
+    //TODO (mohak) This additional delay is for showing user that file upload is taking time. This is a chutiyapa from client not developer.
     let delay:number = 4000;
-    console.log("Graph Processing delay of : " + delay/1000 + " seconds.");
+    console.log("File Upload delay of : " + delay/1000 + " seconds.");
     this.attachmentUploading = true;
     this.scrollToBottom();
     setTimeout(()=>{
@@ -133,7 +133,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     //TODO (mohak) This is intentional delay. Should have been handled from Dialogflow but feature not present at the time of writing.
     setTimeout(()=>{
       this.dialogFlowService.query(requestBody).subscribe(
-        response => {
+        async response => {
           console.log(response);
           
           var responseMessages = response['result']['fulfillment']['messages'];
@@ -166,6 +166,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
                 messageItem = new MessageItem(TextMessageComponent,'ChatBot',JSON.stringify(richMessages[i]));
               }
               this.createMessage(messageItem);
+              await this.sleep(3000);
             }
 
           }
@@ -173,6 +174,10 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
         }
       );
     },delay);
+  }
+
+  async sleep(ms){
+    return new Promise(r => setTimeout(r, ms));
   }
 
   onFileChange(event) {

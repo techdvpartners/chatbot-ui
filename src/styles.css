@@ -13,7 +13,7 @@ html, body {
 	right: -25px;
   	top: 30%;
 	border: 12px solid;
-	border-color: #6c757d transparent transparent #6c757d;
+	border-color: blue transparent transparent blue;
 }
 
 .tri-left.left-in:after{
@@ -22,5 +22,15 @@ html, body {
   	left: -25px;
   	top: 30%;
 	border: 12px solid;
-	border-color: #f8f9fa #f8f9fa transparent transparent;
+	border-color: white white transparent transparent;
+}
+
+.chat-message-box-user{
+	background-color: blue;
+	color:white;
+}
+
+.chat-message-box-bot{
+	background-color: white;
+	color: blue;
 }

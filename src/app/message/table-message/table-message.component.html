@@ -1,12 +1,12 @@
 <div [ngClass]="{
-  'bg-success text-white text-right tri-right right-in': sender === 'You',
-  'bg-light tri-left left-in': sender === 'ChatBot'
+  'chat-message-box-user text-right tri-right right-in': sender === 'You',
+  'chat-message-box-bot tri-left left-in': sender === 'ChatBot'
 }" class="row card round">
-<div class="card-body table-responsive-sm">
-  <p class="card-title">
-    <b>{{ sender }}</b>
-  </p>
-  
+  <div class="card-body table-responsive-sm">
+    <p class="card-title">
+      <b>{{ sender }}</b>
+    </p>
+
     <table class="table table-striped">
       <thead>
         <tr>
@@ -26,5 +26,5 @@
         </tr>
       </tbody>
     </table>
-</div>
+  </div>
 </div>

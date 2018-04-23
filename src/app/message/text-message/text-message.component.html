@@ -1,6 +1,6 @@
 <div [ngClass]="{
-    'bg-secondary text-white text-right tri-right right-in': sender === 'You',
-    'bg-light tri-left left-in': sender === 'ChatBot'
+    'chat-message-box-user text-right tri-right right-in': sender === 'You',
+    'chat-message-box-bot tri-left left-in': sender === 'ChatBot'
 }" class="row card round">
     <div class="card-body">
         <p class="card-title">
