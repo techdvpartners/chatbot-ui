@@ -87,30 +87,31 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     this.clearFileSelection();
   }
 
-  sendEvent() {
+  async sendEvent() {
     var data = this.fileAsDataURL;
     
+    this.attachmentUploading = true;
+    this.scrollToBottom();
+    
+    let messageItem = new MessageItem(TextMessageComponent,'You','Attachment Uploaded');
     //TODO (mohak) This additional delay is for showing user that file upload is taking time. This is a chutiyapa from client not developer.
     let delay:number = 4000;
     console.log("File Upload delay of : " + delay/1000 + " seconds.");
-    this.attachmentUploading = true;
-    this.scrollToBottom();
-    setTimeout(()=>{
-      let messageItem = new MessageItem(TextMessageComponent,'You','Attachment Uploaded');
-      this.createMessage(messageItem);
-      var requestBodyWithEvent = {
-        "lang": "en",
-        "event": {
-          "name": "file-upload",
-          "data":{
-            "dataUrl":data
-          }
-        },
-        "sessionId": this.sessionId
-      };
-      this.queryAndHandleResponse(requestBodyWithEvent);
-      this.attachmentUploading = false;
-    },delay);
+    await this.sleep(delay);
+    this.createMessage(messageItem);
+    var requestBodyWithEvent = {
+      "lang": "en",
+      "event": {
+        "name": "file-upload",
+        "data":{
+          "dataUrl":data
+        }
+      },
+      "sessionId": this.sessionId
+    };
+    this.queryAndHandleResponse(requestBodyWithEvent);
+    this.attachmentUploading = false;
+    
   }
   sendTextMessage() {
     var queryMessage = this.textMessage;
@@ -128,52 +129,52 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     console.log(requestBody);
     let delay = Math.floor(Math.random() * 2000) + 1000;
     console.log("Delay in miniseconds: " + delay);
-    this.botTyping = true;
 
-    //TODO (mohak) This is intentional delay. Should have been handled from Dialogflow but feature not present at the time of writing.
-    setTimeout(()=>{
-      this.dialogFlowService.query(requestBody).subscribe(
-        async response => {
-          console.log(response);
-          
-          var responseMessages = response['result']['fulfillment']['messages'];
-          for (var message in responseMessages) {
-            let messageItem = new MessageItem(TextMessageComponent,'ChatBot',responseMessages[message]['speech']);
+    this.dialogFlowService.query(requestBody).subscribe(
+      async response => {
+        this.botTyping = true;
+        console.log(response);
+        
+        var responseMessages = response['result']['fulfillment']['messages'];
+        for (var message in responseMessages) {
+          let messageItem = new MessageItem(TextMessageComponent,'ChatBot',responseMessages[message]['speech']);
+          //TODO (mohak) This is intentional delay. Should have been handled from Dialogflow but feature not present at the time of writing.
+          await this.sleep(delay);
+          this.createMessage(messageItem);
+        }
+
+        if(response['result']['fulfillment']['data']!=null){
+          var richMessages = response['result']['fulfillment']['data'];
+          for(var i in richMessages){
+            let messageItem;
+            if(richMessages[i]['representation'] == 'graph'){
+              messageItem = new MessageItem(GraphMessageComponent,'ChatBot',{
+                "xAxis":richMessages[i]['graphData']['xAxis'],
+                "yAxis":richMessages[i]['graphData']['yAxis'],
+                "title":richMessages[i]['graphData']['title']
+              });
+            }
+            else if(richMessages[i]['representation'] == 'text'){
+              messageItem = new MessageItem(TextMessageComponent,'ChatBot',richMessages[i]['textData']);
+            }
+            else if(richMessages[i]['representation'] == 'table'){
+              messageItem = new MessageItem(TableMessageComponent,'ChatBot',richMessages[i]['tableData']);
+            }
+            else if(richMessages[i]['representation'] == 'sessionId'){
+              messageItem = new MessageItem(TextMessageComponent,'ChatBot',"Chat Reference : " + this.sessionId);
+            }
+            else{
+              messageItem = new MessageItem(TextMessageComponent,'ChatBot',JSON.stringify(richMessages[i]));
+            }
+            //TODO (mohak) This is intentional delay. Should have been handled from Dialogflow but feature not present at the time of writing.
+            await this.sleep(delay);
             this.createMessage(messageItem);
           }
-
-          if(response['result']['fulfillment']['data']!=null){
-            var richMessages = response['result']['fulfillment']['data'];
-            for(var i in richMessages){
-              let messageItem;
-              if(richMessages[i]['representation'] == 'graph'){
-                messageItem = new MessageItem(GraphMessageComponent,'ChatBot',{
-                  "xAxis":richMessages[i]['graphData']['xAxis'],
-                  "yAxis":richMessages[i]['graphData']['yAxis'],
-                  "title":richMessages[i]['graphData']['title']
-                });
-              }
-              else if(richMessages[i]['representation'] == 'text'){
-                messageItem = new MessageItem(TextMessageComponent,'ChatBot',richMessages[i]['textData']);
-              }
-              else if(richMessages[i]['representation'] == 'table'){
-                messageItem = new MessageItem(TableMessageComponent,'ChatBot',richMessages[i]['tableData']);
-              }
-              else if(richMessages[i]['representation'] == 'sessionId'){
-                messageItem = new MessageItem(TextMessageComponent,'ChatBot',"Chat Reference : " + this.sessionId);
-              }
-              else{
-                messageItem = new MessageItem(TextMessageComponent,'ChatBot',JSON.stringify(richMessages[i]));
-              }
-              this.createMessage(messageItem);
-              await this.sleep(3000);
-            }
-
-          }
-          this.botTyping = false;
         }
-      );
-    },delay);
+        this.botTyping = false;
+      }
+    );
+    
   }
 
   async sleep(ms){
