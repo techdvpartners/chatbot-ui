@@ -4,13 +4,13 @@ html, body {
 }
 .round {
     border-radius: 30px;
-    margin: 10px;
+	margin: 10px;
 }
 
 .tri-right.right-in:after{
 	content: ' ';
 	position: absolute;
-	right: -25px;
+	right: -24px;
   	top: 30%;
 	border: 12px solid;
 	border-color: rgb(74, 144, 226) transparent transparent rgb(74, 144, 226);
@@ -19,7 +19,7 @@ html, body {
 .tri-left.left-in:after{
 	content: ' ';
 	position: absolute;
-  	left: -25px;
+  	left: -24px;
   	top: 30%;
 	border: 12px solid;
 	border-color: white white transparent transparent;
