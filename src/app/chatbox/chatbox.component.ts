@@ -95,9 +95,8 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     
     let messageItem = new MessageItem(TextMessageComponent,'You','Attachment Uploaded');
     //TODO (mohak) This additional delay is for showing user that file upload is taking time. This is a chutiyapa from client not developer.
-    let delay:number = 4000;
-    console.log("File Upload delay of : " + delay/1000 + " seconds.");
-    await this.sleep(delay);
+    console.log("File Upload delay: ");
+    await this.sleep(4000);
     this.createMessage(messageItem);
     var requestBodyWithEvent = {
       "lang": "en",
@@ -127,19 +126,20 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
 
   queryAndHandleResponse(requestBody){
     console.log(requestBody);
-    let delay = Math.floor(Math.random() * 2000) + 1000;
-    console.log("Delay in miniseconds: " + delay);
+    
+    
 
     this.dialogFlowService.query(requestBody).subscribe(
       async response => {
         this.botTyping = true;
+        this.scrollToBottom();
         console.log(response);
         
         var responseMessages = response['result']['fulfillment']['messages'];
         for (var message in responseMessages) {
           let messageItem = new MessageItem(TextMessageComponent,'ChatBot',responseMessages[message]['speech']);
           //TODO (mohak) This is intentional delay. Should have been handled from Dialogflow but feature not present at the time of writing.
-          await this.sleep(delay);
+          await this.sleep();
           this.createMessage(messageItem);
         }
 
@@ -167,7 +167,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
               messageItem = new MessageItem(TextMessageComponent,'ChatBot',JSON.stringify(richMessages[i]));
             }
             //TODO (mohak) This is intentional delay. Should have been handled from Dialogflow but feature not present at the time of writing.
-            await this.sleep(delay);
+            await this.sleep();
             this.createMessage(messageItem);
           }
         }
@@ -177,8 +177,12 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     
   }
 
-  async sleep(ms){
-    return new Promise(r => setTimeout(r, ms));
+  async sleep(delay?:number){
+    if(!delay){
+      delay = Math.floor(Math.random() * 2000) + 1000;
+    }
+    console.log("Delay in miniseconds: " + delay);
+    return new Promise(r => setTimeout(r, delay));
   }
 
   onFileChange(event) {
