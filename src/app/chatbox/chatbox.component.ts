@@ -200,7 +200,9 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
 
   getFileName(){
     if(this.attachment.nativeElement.value){
-      return this.attachment.nativeElement.value;
+      let fileFakePath = this.attachment.nativeElement.value;
+      let fileFakePathSplitArray = fileFakePath.split('\\');
+      return fileFakePathSplitArray[fileFakePathSplitArray.length - 1];
     }
     else{
       return "Choose File";
