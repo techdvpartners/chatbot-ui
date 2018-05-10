@@ -139,13 +139,14 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
         for (var message in responseMessages) {
           let messageItem = new MessageItem(TextMessageComponent,'ChatBot',responseMessages[message]['speech']);
           //TODO (mohak) This is intentional delay. Should have been handled from Dialogflow but feature not present at the time of writing.
-          await this.sleep();
+          await this.sleep(responseMessages[message]['speech'].length*50);
           this.createMessage(messageItem);
         }
 
         if(response['result']['fulfillment']['data']!=null){
           var richMessages = response['result']['fulfillment']['data'];
           for(var i in richMessages){
+            let delay;
             let messageItem;
             if(richMessages[i]['representation'] == 'graph'){
               messageItem = new MessageItem(GraphMessageComponent,'ChatBot',{
@@ -153,21 +154,26 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
                 "yAxis":richMessages[i]['graphData']['yAxis'],
                 "title":richMessages[i]['graphData']['title']
               });
+              delay = 5000;
             }
             else if(richMessages[i]['representation'] == 'text'){
               messageItem = new MessageItem(TextMessageComponent,'ChatBot',richMessages[i]['textData']);
+              delay = richMessages[i]['textData'].length * 50;
             }
             else if(richMessages[i]['representation'] == 'table'){
               messageItem = new MessageItem(TableMessageComponent,'ChatBot',richMessages[i]['tableData']);
+              delay = 5000;
             }
             else if(richMessages[i]['representation'] == 'sessionId'){
               messageItem = new MessageItem(TextMessageComponent,'ChatBot',"Chat Reference : " + this.sessionId);
+              delay = "Chat Reference : ".length*50;
             }
             else{
               messageItem = new MessageItem(TextMessageComponent,'ChatBot',JSON.stringify(richMessages[i]));
+              delay = richMessages[i].length  *50;
             }
             //TODO (mohak) This is intentional delay. Should have been handled from Dialogflow but feature not present at the time of writing.
-            await this.sleep();
+            await this.sleep(delay);
             this.createMessage(messageItem);
           }
         }

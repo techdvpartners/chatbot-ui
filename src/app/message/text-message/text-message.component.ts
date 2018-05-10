@@ -12,6 +12,7 @@ export class TextMessageComponent implements MessageComponent {
   constructor() { }
 
   ngOnInit() {
+    this.message = this.message.replace('\n','<br>');
   }
 
 }
