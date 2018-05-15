@@ -5,6 +5,7 @@ html, body {
 .round {
     border-radius: 30px;
 	margin: 10px;
+	border-style: none;
 }
 
 .tri-right.right-in:after{
