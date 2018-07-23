@@ -34,12 +34,12 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     var requestBodyWithEvent = {
-      "lang": "en",
-      "event": {
-        "name": "Welcome",
-        "data":{}
-      },
-      "sessionId": this.sessionId
+      "queryInput": {
+        "event": {
+          "name": "Welcome",
+          "languageCode": "en"
+        }
+      }
     };
     this.queryAndHandleResponse(requestBodyWithEvent);    
   }
@@ -127,19 +127,17 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
   queryAndHandleResponse(requestBody){
     console.log(requestBody);
     
-    
-
-    this.dialogFlowService.query(requestBody).subscribe(
+    this.dialogFlowService.query(requestBody,this.sessionId).subscribe(
       async response => {
         this.botTyping = true;
         this.scrollToBottom();
         console.log(response);
         
-        var responseMessages = response['result']['fulfillment']['messages'];
-        for (var message in responseMessages) {
-          let messageItem = new MessageItem(TextMessageComponent,'ChatBot',responseMessages[message]['speech']);
+        var responseMessages = response['queryResult']['fulfillmentMessages'];
+        for (let message of responseMessages) {
+          let messageItem = new MessageItem(TextMessageComponent,'ChatBot',message['text']['text'][0]);
           //TODO (mohak) This is intentional delay. Should have been handled from Dialogflow but feature not present at the time of writing.
-          await this.sleep(responseMessages[message]['speech'].length*50);
+          await this.sleep(message['text']['text'][0].length*50);
           this.createMessage(messageItem);
         }
 
