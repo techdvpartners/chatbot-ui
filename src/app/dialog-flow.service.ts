@@ -7,11 +7,13 @@ export class DialogFlowService {
   url = "https://api.dialogflow.com/v1/query?v=20150910";
   constructor(private http: HttpClient) { }
 
+  token:string;
+
   query(requestBody){
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        'Authorization': 'Bearer '+CONFIG.bearerToken
+        'Authorization': 'Bearer '+this.token
       })
     };
 

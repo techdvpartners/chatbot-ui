@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef, TemplateRef, ViewContainerRef, AfterViewInit, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef, TemplateRef, ViewContainerRef, AfterViewInit, ComponentFactoryResolver, Input } from '@angular/core';
 import { DialogFlowService } from '../dialog-flow.service';
 import { Chart } from 'chart.js';
 import { MessageDirective } from '../message/message.directive';
@@ -7,6 +7,7 @@ import { MessageComponent } from '../message/message.component';
 import { TextMessageComponent } from '../message/text-message/text-message.component';
 import { GraphMessageComponent } from '../message/graph-message/graph-message.component';
 import { TableMessageComponent } from '../message/table-message/table-message.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chatbox',
@@ -30,9 +31,12 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
   botTyping:boolean;
   attachmentUploading:boolean = false;
 
-  constructor(private dialogFlowService: DialogFlowService, private componentFactoryResolver: ComponentFactoryResolver) { }
+  constructor(private dialogFlowService: DialogFlowService, private componentFactoryResolver: ComponentFactoryResolver, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.data.subscribe(data => {
+      this.dialogFlowService.token = data.token;
+    });
     var requestBodyWithEvent = {
       "lang": "en",
       "event": {
