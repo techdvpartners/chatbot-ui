@@ -8,6 +8,7 @@ import { TextMessageComponent } from '../message/text-message/text-message.compo
 import { GraphMessageComponent } from '../message/graph-message/graph-message.component';
 import { TableMessageComponent } from '../message/table-message/table-message.component';
 import { ActivatedRoute } from '@angular/router';
+import { ImageMessageComponent } from '../message/image-message/image-message.component';
 
 @Component({
   selector: 'app-chatbox',
@@ -163,6 +164,10 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
             else if(richMessages[i]['representation'] == 'text'){
               messageItem = new MessageItem(TextMessageComponent,'ChatBot',richMessages[i]['textData']);
               delay = richMessages[i]['textData'].length * 50;
+            }
+            else if(richMessages[i]['representation'] == 'image'){
+              messageItem = new MessageItem(ImageMessageComponent,'ChatBot',richMessages[i]['imageDataUrl']);
+              delay = 5000;
             }
             else if(richMessages[i]['representation'] == 'table'){
               messageItem = new MessageItem(TableMessageComponent,'ChatBot',richMessages[i]['tableData']);

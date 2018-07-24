@@ -12,10 +12,11 @@ import { GraphMessageComponent } from './message/graph-message/graph-message.com
 import { TableMessageComponent } from './message/table-message/table-message.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { ModalviewComponent } from './modalview/modalview.component';
+import { ImageMessageComponent } from './message/image-message/image-message.component';
 
 
 @NgModule({
-  entryComponents: [ TextMessageComponent, GraphMessageComponent, TableMessageComponent ],
+  entryComponents: [ TextMessageComponent, GraphMessageComponent, TableMessageComponent, ImageMessageComponent ],
   declarations: [
     AppComponent,
     ChatboxComponent,
@@ -23,7 +24,8 @@ import { ModalviewComponent } from './modalview/modalview.component';
     TextMessageComponent,
     GraphMessageComponent,
     TableMessageComponent,
-    ModalviewComponent
+    ModalviewComponent,
+    ImageMessageComponent
   ],
   imports: [
     BrowserModule,
