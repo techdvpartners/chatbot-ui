@@ -1,6 +1,5 @@
 import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef, TemplateRef, ViewContainerRef, AfterViewInit, ComponentFactoryResolver, Input } from '@angular/core';
 import { DialogFlowService } from '../dialog-flow.service';
-import { Chart } from 'chart.js';
 import { MessageDirective } from '../message/message.directive';
 import { MessageItem } from '../message/message-item';
 import { MessageComponent } from '../message/message.component';

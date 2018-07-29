@@ -115,7 +115,7 @@ function processV1Request(request, response) {
           },
           {
             "representation": "text",
-            "textData": "Based on the information provided, we can offer you the following options."
+            "textData": "Based on the information provided, we can offer you the following options. Please click on the button with the tariff name."
           },
           {
             "representation": "table",
@@ -164,6 +164,19 @@ function processV1Request(request, response) {
         }
         smtpTransport.close();
       });
+      let responseToUser = {
+        data: [
+          {
+            "representation": "sessionId",
+          }
+        ],
+        messages: messages,
+        //outputContexts: [{'name': 'weather', 'lifespan': 2, 'parameters': {'city': 'Rome'}}], // Optional, uncomment to enable
+        //speech: 'This message is from Dialogflow\'s Cloud Functions for Firebase editor! v1 speech', // spoken response
+        speech: messages[0].speech,
+        text: messages[0].speech
+      };
+      sendResponse(responseToUser);
     }
   };
   // If undefined or unknown action use the default handler

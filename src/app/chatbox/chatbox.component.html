@@ -9,7 +9,7 @@
 <div class="container" id="chatInput">
   <div class="row input-group m-1">
     <input type="text" class="form-control" placeholder="Type your message here..." id="textMessage" [(ngModel)]="textMessage"
-      (keydown.enter)="sendRequest()">
+      (keydown.enter)="sendRequest()" autofocus>
     <div class="input-group-append">
       <button class="btn btn-primary" type="button" (click)="sendRequest()">Send</button>
     </div>
