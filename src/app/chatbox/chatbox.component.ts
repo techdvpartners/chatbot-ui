@@ -227,4 +227,7 @@ export class ChatboxComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  reset(){
+    window.location.reload();
+  }
 }
